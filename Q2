@@ -1,0 +1,89 @@
+import java.util.Scanner;
+
+// Step 1: Create an interface called Taxable
+interface Taxable {
+    double salesTax = 0.07;     // 7% Sales Tax
+    double incomeTax = 0.105;   // 10.5% Income Tax
+
+    // Abstract method to calculate tax
+    void calcTax();
+}
+
+// Step 2a: Create Employee class implementing Taxable
+class Employee implements Taxable {
+    private int empId;
+    private String name;
+    private double salary;
+
+    // Constructor to initialize employee data
+    public Employee(int empId, String name, double salary) {
+        this.empId = empId;
+        this.name = name;
+        this.salary = salary;
+    }
+
+    // Method to calculate income tax based on yearly salary
+    public void calcTax() {
+        double tax = salary * incomeTax;
+        System.out.println("Income Tax for Employee " + name + " (ID: " + empId + ") = ₹" + tax);
+    }
+}
+
+// Step 2b: Create Product class implementing Taxable
+class Product implements Taxable {
+    private int pid;
+    private double price;
+    private int quantity;
+
+    // Constructor to initialize product data
+    public Product(int pid, double price, int quantity) {
+        this.pid = pid;
+        this.price = price;
+        this.quantity = quantity;
+    }
+
+    // Method to calculate sales tax based on product unit price
+    public void calcTax() {
+        double tax = price * salesTax;
+        System.out.println("Sales Tax for Product ID " + pid + " = ₹" + tax + " per unit.");
+    }
+}
+
+// Step 2c: Main class
+public class DriverMain {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        // Taking Employee details from user
+        System.out.println("Enter Employee Details:");
+        System.out.print("Enter Employee ID: ");
+        int empId = scanner.nextInt();
+        scanner.nextLine(); // consume leftover newline
+        System.out.print("Enter Employee Name: ");
+        String name = scanner.nextLine();
+        System.out.print("Enter Employee Salary: ");
+        double salary = scanner.nextDouble();
+
+        // Create Employee object
+        Employee emp = new Employee(empId, name, salary);
+
+        // Taking Product details from user
+        System.out.println("\nEnter Product Details:");
+        System.out.print("Enter Product ID: ");
+        int pid = scanner.nextInt();
+        System.out.print("Enter Product Price: ");
+        double price = scanner.nextDouble();
+        System.out.print("Enter Product Quantity: ");
+        int quantity = scanner.nextInt();
+
+        // Create Product object
+        Product prod = new Product(pid, price, quantity);
+
+        // Call calcTax() methods
+        System.out.println("\nCalculating Taxes...");
+        emp.calcTax();  // Calculates income tax
+        prod.calcTax(); // Calculates sales tax
+
+        scanner.close(); // Close scanner to prevent memory leak
+    }
+}
