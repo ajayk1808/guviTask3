@@ -1,0 +1,181 @@
+import java.util.Scanner;
+
+// Class representing a single Book
+class Book {
+    // Attributes of a Book
+    private int bookID;
+    private String title;
+    private String author;
+    private boolean isAvailable;
+
+    // Constructor to initialize the Book
+    public Book(int bookID, String title, String author, boolean isAvailable) {
+        this.bookID = bookID;
+        this.title = title;
+        this.author = author;
+        this.isAvailable = isAvailable;
+    }
+
+    // Getter methods to access private attributes
+    public int getBookID() {
+        return bookID;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public String getAuthor() {
+        return author;
+    }
+
+    public boolean isAvailable() {
+        return isAvailable;
+    }
+
+    // Setter methods to update attributes
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public void setAuthor(String author) {
+        this.author = author;
+    }
+
+    public void setAvailable(boolean isAvailable) {
+        this.isAvailable = isAvailable;
+    }
+
+    // Method to display book details
+    public void displayBookInfo() {
+        System.out.println("ID: " + bookID + ", Title: " + title + ", Author: " + author + ", Available: " + isAvailable);
+    }
+}
+
+// Class representing a Library (collection of books)
+class Library {
+    private Book[] books; // Array to store Book objects
+    private int count;    // Counter to keep track of number of books
+
+    // Constructor to initialize Library
+    public Library() {
+        books = new Book[5]; // Library can hold maximum 5 books
+        count = 0;           // Initially, 0 books
+    }
+
+    // Method to add a book to the library
+    public void addBook(Book book) {
+        if (count < books.length) {
+            books[count++] = book; // Add book and increase count
+            System.out.println("Book added successfully.");
+        } else {
+            System.out.println("Library is full. Cannot add more books.");
+        }
+    }
+
+    // Method to remove a book from the library by Book ID
+    public void removeBook(int bookID) {
+        for (int i = 0; i < count; i++) {
+            if (books[i].getBookID() == bookID) {
+                // Shift all books one position left after removing
+                for (int j = i; j < count - 1; j++) {
+                    books[j] = books[j + 1];
+                }
+                books[count - 1] = null; // Last book becomes null
+                count--; // Reduce the number of books
+                System.out.println("Book removed successfully.");
+                return;
+            }
+        }
+        System.out.println("Book not found.");
+    }
+
+    // Method to search for a book using Book ID
+    public Book searchBook(int bookID) {
+        for (int i = 0; i < count; i++) {
+            if (books[i].getBookID() == bookID) {
+                return books[i]; // Book found
+            }
+        }
+        return null; // Book not found
+    }
+
+    // Method to display all books in the library
+    public void displayBooks() {
+        if (count == 0) {
+            System.out.println("No books in the library.");
+            return;
+        }
+        for (int i = 0; i < count; i++) {
+            books[i].displayBookInfo();
+        }
+    }
+}
+
+// Main class to run the program
+public class BookManagementSystem {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in); // Scanner to read user input
+        Library library = new Library(); // Create a new Library object
+
+        int choice; // To store user menu choice
+        do {
+            // Display Menu
+            System.out.println("\nLibrary Management System:");
+            System.out.println("1. Add Book");
+            System.out.println("2. Remove Book");
+            System.out.println("3. Search Book");
+            System.out.println("4. Display Books");
+            System.out.println("5. Exit");
+            System.out.print("Enter your choice: ");
+            choice = scanner.nextInt(); // Read user's choice
+
+            // Handle user's choice
+            switch (choice) {
+                case 1:
+                    // Add a new book
+                    System.out.print("Enter Book ID: ");
+                    int id = scanner.nextInt();
+                    scanner.nextLine(); // Consume newline
+                    System.out.print("Enter Book Title: ");
+                    String title = scanner.nextLine();
+                    System.out.print("Enter Author: ");
+                    String author = scanner.nextLine();
+                    System.out.print("Is Available (true/false): ");
+                    boolean isAvailable = scanner.nextBoolean();
+                    Book book = new Book(id, title, author, isAvailable);
+                    library.addBook(book);
+                    break;
+                case 2:
+                    // Remove a book
+                    System.out.print("Enter Book ID to remove: ");
+                    int removeId = scanner.nextInt();
+                    library.removeBook(removeId);
+                    break;
+                case 3:
+                    // Search a book
+                    System.out.print("Enter Book ID to search: ");
+                    int searchId = scanner.nextInt();
+                    Book foundBook = library.searchBook(searchId);
+                    if (foundBook != null) {
+                        foundBook.displayBookInfo();
+                    } else {
+                        System.out.println("Book not found.");
+                    }
+                    break;
+                case 4:
+                    // Display all books
+                    library.displayBooks();
+                    break;
+                case 5:
+                    // Exit program
+                    System.out.println("Exiting... Thank you!");
+                    break;
+                default:
+                    System.out.println("Invalid choice. Please enter again.");
+            }
+        } while (choice != 5); // Keep looping until user chooses 5
+
+        scanner.close(); // Close the scanner
+    }
+}
